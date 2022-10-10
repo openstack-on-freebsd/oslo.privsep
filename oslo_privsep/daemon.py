@@ -68,7 +68,7 @@ from oslo_privsep._i18n import _
 from oslo_privsep import capabilities
 from oslo_privsep import comm
 
-if platform.system() == 'Linux':
+if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
     import fcntl
     import grp
     import pwd
