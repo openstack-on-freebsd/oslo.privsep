@@ -406,7 +406,7 @@ class Daemon(object):
     def _drop_privs(self):
         try:
             # Keep current capabilities across setuid away from root.
-            capabilities.set_keepcaps(True)
+            #capabilities.set_keepcaps(True)
 
             if self.group is not None:
                 try:
@@ -423,12 +423,13 @@ class Daemon(object):
                 setgid(self.group)
 
         finally:
-            capabilities.set_keepcaps(False)
+            #capabilities.set_keepcaps(False)
+            pass
 
         LOG.info('privsep process running with uid/gid: %(uid)s/%(gid)s',
                  {'uid': os.getuid(), 'gid': os.getgid()})
 
-        capabilities.drop_all_caps_except(self.caps, self.caps, [])
+        #capabilities.drop_all_caps_except(self.caps, self.caps, [])
 
         def fmt_caps(capset):
             if not capset:
@@ -438,15 +439,15 @@ class Daemon(object):
             fc.sort()
             return '|'.join(fc)
 
-        eff, prm, inh = capabilities.get_caps()
-        LOG.info(
-            'privsep process running with capabilities '
-            '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
-            {
-                'eff': fmt_caps(eff),
-                'prm': fmt_caps(prm),
-                'inh': fmt_caps(inh),
-            })
+        #eff, prm, inh = capabilities.get_caps()
+        #LOG.info(
+        #    'privsep process running with capabilities '
+        #    '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
+        #    {
+        #        'eff': fmt_caps(eff),
+        #        'prm': fmt_caps(prm),
+        #        'inh': fmt_caps(inh),
+        #    })
 
     def _process_cmd(self, msgid, cmd, *args):
         """Executes the requested command in an execution thread.
