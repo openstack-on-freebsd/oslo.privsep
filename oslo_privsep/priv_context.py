@@ -148,7 +148,12 @@ class PrivContext(object):
         # NOTE(claudiub): oslo.privsep is not currently supported on Windows,
         # as it uses Linux-specific functionality (os.fork, socker.AF_UNIX).
         # The client_mode should be set to False on Windows.
-        self.client_mode = sys.platform != 'win32'
+        # NOTE(starbops): so does FreeBSD
+        if sys.platform == 'win32' or sys.platform.startswith('freebsd'):
+            self.client_mode = False
+        else:
+            self.client_mode = True
+
         self.channel = None
         self.start_lock = threading.Lock()
 
@@ -219,6 +224,10 @@ class PrivContext(object):
             raise RuntimeError(
                 "Enabling the client_mode is not currently "
                 "supported on Windows.")
+        elif enabled and sys.platformstartswith('freebsd'):
+            raise RuntimeError(
+                "Enabling the client_mode is not currently "
+                "supported on FreeBSD.")
         self.client_mode = enabled
 
     def entrypoint(self, func):
